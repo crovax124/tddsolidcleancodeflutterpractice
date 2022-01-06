@@ -1,4 +1,3 @@
-
 import 'package:clean_architecture_tdd/features/number_trivia/domain/entities/number_trivia.dart';
 import 'package:clean_architecture_tdd/features/number_trivia/domain/repositories/number_trivia_repository.dart';
 import 'package:clean_architecture_tdd/features/number_trivia/domain/usecases/get_concrete_number_trivia.dart';
@@ -8,7 +7,6 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'get_concrete_number_trivia_test.mocks.dart';
-
 
 // class MockNumberTriviaRepository extends Mock
 //     implements NumberTriviaRepository {}
@@ -29,19 +27,20 @@ void main() {
 
   test(
     'should get trivia for the number from the repository',
-        () async {
+    () async {
       // "On the fly" implementation of the Repository using the Mockito package.
       // When getConcreteNumberTrivia is called with any argument, always answer with
       // the Right "side" of Either containing a test NumberTrivia object.
       when(mockNumberTriviaRepository.getConcreteNumberTrivia(any))
           .thenAnswer((_) async => Right(tNumberTrivia));
-//act
-        final result = await usecase.execute(number:tNumber);
-        //assert
-          expect(result, Right(tNumberTrivia));
-          verify(mockNumberTriviaRepository.getConcreteNumberTrivia(tNumber));
-          verifyNoMoreInteractions(mockNumberTriviaRepository);
-
+      //act
+      final result = await usecase.call(
+        Params(number: tNumber),
+      );
+      //assert
+      expect(result, Right(tNumberTrivia));
+      verify(mockNumberTriviaRepository.getConcreteNumberTrivia(tNumber));
+      verifyNoMoreInteractions(mockNumberTriviaRepository);
     },
   );
 }
